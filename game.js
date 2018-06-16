@@ -45,7 +45,7 @@ function Bullet(x, y) {
   this.y = y;
   this.color = 'red';
   this.radius = 3;
-  this.speed = 3;
+  this.speed = 1;
 
   this.draw = function() {
     context.fillStyle = this.color;
@@ -96,27 +96,28 @@ window.setInterval(function() {
   for(let i = 0; i < invaders.length; i++) {
     invaders[i].draw();
     // invaders[i].move();
-
-    // if(bullets[i].y < 0) {
-    //   bullets.splice(i, 1);
-    // }
   }
 
+  // Iterate over the bullets array
   for(let i = 0; i < bullets.length; i++) {
     bullets[i].draw();
     bullets[i].move();
 
-    // if(bullets[i].y < 0) {
-    //   bullets.splice(i, 1);
-    // }
-
+    // Iterate over the invaders array
     for(let j = 0; j < invaders.length; j++) {
-      // console.log(bullets[i].x);
-      // distance(bullets[i].x, bullets[i].y, invaders[j].x, invaders[j].y)
-      // if(distance(bullets[i].x, bullets[i].y, invaders[j].x, invaders[j].y) < bullets[i].radius + invaders[j].radius) {
-      //   // invaders.splice(j)
-      // }
+      if(!bullets[i] || !invaders[j]) { return }
+
+      // Remove invader and bullet in case of collision
+      let currentDistance = distance(bullets[i].x, invaders[j].x, bullets[i].y, invaders[j].y)
+      let radiusSum = bullets[i].radius + invaders[j].radius
+      if(currentDistance < radiusSum) {
+        invaders.splice(j, 1)
+        bullets.splice(i, 1)
+      }
     }
+
+    // Remove bullet when leave screen
+    if(bullets[i] && bullets[i].y < 0) { bullets.splice(i, 1); }
   }
 
   function distance(x1, x2, y1, y2) {
