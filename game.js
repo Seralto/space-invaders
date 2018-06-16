@@ -9,12 +9,25 @@ function Invader(x, y) {
   this.y = y;
   this.color = 'blue';
   this.radius = 20;
+  this.speed = 0.1
 
   this.draw = function() {
     context.fillStyle = this.color;
     context.beginPath();
     context.arc(this.x, this.y, this.radius, Math.PI * 2, false);
     context.fill();
+  },
+
+  this.move = function() {
+    this.x += this.speed;
+    if(invaders[invaders.length - 1].x > canvas.width - this.radius) {
+      this.y += 10
+      this.speed *= -1
+    }
+    if(invaders[0].x < this.radius) {
+      this.y += 10
+      this.speed *= -1
+    }
   }
 }
 
@@ -45,7 +58,7 @@ function Bullet(x, y) {
   this.y = y;
   this.color = 'red';
   this.radius = 3;
-  this.speed = 1;
+  this.speed = 1.2;
 
   this.draw = function() {
     context.fillStyle = this.color;
@@ -95,7 +108,7 @@ window.setInterval(function() {
 
   for(let i = 0; i < invaders.length; i++) {
     invaders[i].draw();
-    // invaders[i].move();
+    invaders[i].move();
   }
 
   // Iterate over the bullets array
